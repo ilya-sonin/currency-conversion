@@ -29,6 +29,7 @@ export function parseApiResponse(data: ApiRawResponse): CurrencyPairData[] {
 export function calculateRatesForBase(
   pairs: CurrencyPairData[],
   baseCurrency: Currency,
+  forConvert: boolean = false,
 ): Record<Currency, number> {
   const directRates: Record<string, number> = {}
   const reversePairs: Record<string, string> = {}
@@ -54,7 +55,9 @@ export function calculateRatesForBase(
     if (directRate !== undefined) {
       if (directRate >= 0.1) {
         rates[currency] = directRate
-      } else if (reverseRate !== undefined) {
+      } else if (forConvert) {
+        rates[currency] = reverseRate !== undefined ? 1 / reverseRate : 1 / directRate
+      } else {
         rates[currency] = reverseRate
       }
     } else if (reverseRate !== undefined) {

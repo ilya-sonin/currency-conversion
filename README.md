@@ -11,6 +11,7 @@
 - TypeScript
 - Pinia (управление состоянием)
 - Tailwind CSS + daisyUI (стилизация)
+- FSD
 
 
 ## Project Setup

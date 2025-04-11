@@ -1,4 +1,4 @@
-import type { Currency } from '@/entities/currency'
+import { type Currency, CurrencyEnum } from '@/entities/currency'
 import { AVAILABLE_CURRENCIES } from '@/entities/currency'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
@@ -8,7 +8,9 @@ export const useConverterStore = defineStore('converter', () => {
   const currencyStore = useCurrencyStore()
 
   const fromCurrency = ref<Currency>(currencyStore.baseCurrency)
-  const toCurrency = ref<Currency>(currencyStore.baseCurrency === 'USD' ? 'RUB' : 'USD')
+  const toCurrency = ref<Currency>(
+    currencyStore.baseCurrency === CurrencyEnum.USD ? CurrencyEnum.RUB : CurrencyEnum.USD,
+  )
   const fromAmount = ref<string>('1')
   const toAmount = ref<string>('')
   const isFromFocused = ref(true)

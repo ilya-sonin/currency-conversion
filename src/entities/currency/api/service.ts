@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import type { Currency, CurrencyRates } from '../model'
+import { CurrencyEnum, type Currency, type CurrencyRates } from '../model'
 import { calculateRatesForBase, parseApiResponse } from './parser'
 import type { ApiRawResponse } from './types'
 
@@ -29,7 +29,7 @@ export class CurrencyService {
   }
 }
 
-export function useCurrencyApi() {
+export function useCurrencyApi(forConvert: boolean = false) {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
   const data = ref<CurrencyRates | null>(null)
@@ -45,7 +45,7 @@ export function useCurrencyApi() {
 
       const currencyPairs = parseApiResponse(apiData)
 
-      const rates = calculateRatesForBase(currencyPairs, baseCurrency)
+      const rates = calculateRatesForBase(currencyPairs, baseCurrency, forConvert)
 
       data.value = {
         base: baseCurrency,
@@ -56,11 +56,11 @@ export function useCurrencyApi() {
 
       const fallbackRates: Record<Currency, number> = {} as Record<Currency, number>
 
-      if (baseCurrency === 'USD') {
+      if (baseCurrency === CurrencyEnum.USD) {
         fallbackRates.USD = 1
         fallbackRates.EUR = 0.85
         fallbackRates.RUB = 87.11
-      } else if (baseCurrency === 'EUR') {
+      } else if (baseCurrency === CurrencyEnum.EUR) {
         fallbackRates.USD = 1.17
         fallbackRates.EUR = 1
         fallbackRates.RUB = 98.63

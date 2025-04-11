@@ -13,17 +13,21 @@ const { fromCurrency, toCurrency, fromAmount, toAmount, availableCurrencies } =
   storeToRefs(converterStore)
 const { updateRates, setFromFocus, setToFocus, swapCurrencies } = converterStore
 
-const { isLoading, error, data, fetchRates } = useCurrencyApi()
+const { isLoading, error, data, fetchRates } = useCurrencyApi(true)
 
 const fromError = ref<string | undefined>(undefined)
 const toError = ref<string | undefined>(undefined)
 
-watch(baseCurrency, (newBaseCurrency) => {
-  if (fromCurrency.value !== newBaseCurrency) {
-    fromCurrency.value = newBaseCurrency
-    fetchRates(newBaseCurrency)
-  }
-})
+watch(
+  baseCurrency,
+  (newBaseCurrency) => {
+    if (fromCurrency.value !== newBaseCurrency) {
+      fromCurrency.value = newBaseCurrency
+      fetchRates(newBaseCurrency)
+    }
+  },
+  { immediate: true, deep: true },
+)
 
 onMounted(async () => {
   await fetchRates(baseCurrency.value)
